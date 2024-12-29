@@ -18,6 +18,7 @@
         width: 100%;
         height: 50px;
         border: 2px solid black;
+        font-size: 18px;
     }
 
     .numbers {
@@ -62,15 +63,16 @@
         let operator = '';
         let secondNumber = '';
         let answer = '';
+        let maxDigit = 15;
         buttons.forEach((button) => {
             button.addEventListener('click', () => {
                 if(button.classList.contains('number')) {
-                    if(!operator){
+                    if(!operator && firstNumber.length < maxDigit){
                         firstNumber += button.textContent;
                         input.value = firstNumber;
-                    } else {
+                    } else if (operator && secondNumber.length < maxDigit){
                         secondNumber += button.textContent;
-                        input.value = firstNumber + operator + secondNumber;
+                        input.value = firstNumber + " " + operator + " " + secondNumber;
                     }
                 } else if (button.classList.contains('operator')) {
                         if(!operator) {
@@ -83,14 +85,15 @@
                     operator = '';
                     secondNumber = '';
                 } else if (button.classList.contains('answer')) {
-                    switch (operator) {
+                    if (operator && firstNumber && secondNumber) {
+                        switch (operator) {
                         case '+' :
                             answer = parseFloat(firstNumber) + parseFloat(secondNumber);
                             break;
                         case '-' :
                             answer = parseFloat(firstNumber) - parseFloat(secondNumber);
                             break;
-                        case '*' :
+                        case 'x' :
                             answer = parseFloat(firstNumber) * parseFloat(secondNumber);
                             break;
                         case '%' :
@@ -101,11 +104,13 @@
                             answer = parseFloat(firstNumber) / parseFloat(secondNumber);
                             break;
                     }
-                    input.value = answer;
-                    firstNumber = answer.toString();
-                    operator = '';
-                    secondNumber = '';
+                        input.value = answer;
+                        firstNumber = answer.toString();
+                        operator = '';
+                        secondNumber = '';
+                    }
                 }
+                    
             })
         })
 
